@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircularMenu">
+        <attr name="circleMenu_icons" format="reference"/>
+        <attr name="circleMenu_colors" format="reference"/>
+        <attr name="circleMenu_centerButtonIcon" format="reference"/>
+        <attr name="circleMenu_centerButtonColor" format="reference"/>
+        <attr name="circleMenu_buttonSpacing" format="dimension"/>
+        <attr name="circleMenu_centerButtonPadding" format="dimension"/>
+        <attr name="circleMenu_useStandardAnimation" format="boolean"/>
+    </declare-styleable>
+</resources>
