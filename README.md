@@ -30,6 +30,6 @@ yourLayout.addView(circularMenu)
 This code initializes a basic CircularMenu instance and demonstrates how to customize its attributes. For further customization options, refer to the full documentation.
 
 Documentation
-For detailed information on constructors, functions, and attributes, refer to the [full documentation here](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/master/documentation). This documentation covers all available methods and customization options provided by the Circular Menu library.
+For detailed information on constructors, functions, and attributes, refer to the [full documentation here](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/91be57587a37786473c7737b34bce741e83fd5c2/doc.md). This documentation covers all available methods and customization options provided by the Circular Menu library.
 
 Feel free to explore and customize the Circular Menu library to suit your app's needs.
