@@ -15,84 +15,36 @@ dependencies {
 ### Constructor  
 The Circular Menu constructor accepts various parameters to customize its appearance:
 
-```kotlin
-constructor(
-    context: Context?,
-    @DrawableRes icons: List<Int>,
-    @ColorRes colors: List<Int>,
-    @DrawableRes centerButtonIconId: Int,
-    @ColorRes centerButtonColorId: Int,
-    buttonSpacing: Float,
-    centerButtonPadding: Float
-)
-```
-Example usage:
+### Initializing and Animations
 
-```kotlin
-val circularMenu = CircularMenu(
-    context,
-    listOf(R.drawable.icon1, R.drawable.icon2, R.drawable.icon3),
-    listOf(R.color.color1, R.color.color2, R.color.color3),
-    R.drawable.center_button_icon,
-    R.color.center_button_color,
-    20.0f,
-    20.0f
-)
-```
-### Methods
-The Circular Menu provides several methods for customization and interaction:
+- `startOpenAnimation()`: Initiates the opening animation.
+- `startCloseAnimation(removeViewAfterEnd: Boolean = false)`: Initiates the closing animation, removing the view from the parent layout upon animation completion if specified.
 
-```startOpenAnimation()```: Initiates the open animation of the menu.  
-```startCloseAnimation()```: Initiates the close animation of the menu.  
-```setColors(colors: List<Int>)```: Sets the colors for the menu sectors.  
-```setCenterButtonIconId(centerButtonIconId: Int)```: Sets the icon for the center button.  
-```setCenterButtonColor(centerButtonColorId: Int)```: Sets the color for the center button.  
-```setButtonSpacing(buttonSpacing: Float)```: Sets the spacing between menu buttons.  
-```setCenterButtonPadding(centerButtonPadding: Float)```: Sets the padding for the center button.
-```setAnimationEventListener(listener: AnimationEventListener)```: Sets an event listener for menu animations.  
-```kotlin
-circularMenu.setAnimationEventListener(object : CircularMenu.AnimationEventListener {
-                override fun onOpenMenuAnimationStart() {
-                    Log.i(TAG, "onOpenMenuAnimationStart")
-                }
+### Customization
 
-                override fun onOpenMenuAnimationEnd() {
-                    Log.e(TAG, "onOpenMenuAnimationEnd")
-                }
+- `setColors(colors: IntArray)`: Sets colors for sectors, retrieving values using a formula.
+- `setIcons(iconsIds: IntArray, useChangeSectorsAnimation: Boolean)`: Sets icons for sectors, with an option to trigger sector change animation.
+- `setCenterButtonIconId(@DrawableRes iconId: Int)`: Sets the icon for the central button.
+- `setCenterButtonColorById(@ColorRes colorId: Int)`: Sets the color for the central button using a color resource.
+- `setCenterButtonColor(color: Int)`: Sets the color for the central button using an integer value.
+- `setButtonSpacing(px: Float)`: Sets the distance between sectors in dp.
+- `setCenterButtonPadding(px: Float)`: Sets padding from the inner radius of the circle to the button in dp.
+- `setCenterButtonPressedColorById(@ColorRes colorId: Int)`: Sets the color of the central button when pressed, using a color resource.
+- `setCenterButtonPressedColor(color: Int)`: Sets the color of the central button when pressed using an integer value.
 
-                override fun onOpenMenuAnimationCancel() {
-                    Log.e(TAG, "onOpenMenuAnimationCancel")
-                }
+### Event Handling
 
-                override fun onCloseMenuAnimationStart() {
-                    Log.e(TAG, "onCloseMenuAnimationStart")
-                }
+- `setAnimationEventListener(listener: AnimationEventListener)`: Overrides the AnimationEventListener.
+- `setOnCenterButtonClickListener(listener: (CircularMenu) -> Unit)`: Overrides the onCenterButtonClickListener.
+- `setOnSectorClickListener(listener: (CircularMenu, sectorIndex: Int) -> Unit)`: Overrides the onSectorClickListener.
 
-                override fun onCloseMenuAnimationEnd() {
-                    Log.e(TAG, "onCloseMenuAnimationEnd")
-                }
+### Utility Functions
 
-                override fun onCloseMenuAnimationCancel() {
-                    Log.e(TAG, "onCloseMenuAnimationCancel")
-                }
+- `removeThisViewFromParent()`: Removes the CircularMenu from the parent layout.
+- `size(): Int`: Returns the number of sectors (buttons).
+- `clearAnimation()`: Clears all animations and interrupts the chain of sequential animations.
+- `setBackgroundColor(color: Int)`: Does nothing, purposefully overridden to disallow setting a background.
 
-            })
-```
-```setOnCenterButtonClickListener(listener: (CircularMenu) -> Unit)```: Sets a click listener for the center button.  
-```kotlin
-circularMenu.setOnCenterButtonClickListener { circleMenu ->
-                Log.i(TAG, "Center button click.")
-                circleMenu.startCloseAnimation()
-
-            }
-```
-```setOnSectorClickListener(listener: (Sector, sectorIndex: Int) -> Unit)```: Sets a click listener for individual sectors.  
-```kotlin
-circleMenu1.setOnSectorClickListener { sector, sectorIndex ->
-                Log.i(TAG, "Sector index: $sectorIndex")
-                Log.i(TAG, sector.toString())
-            }
-```
 
 ### Sector Properties
 The Sector object has the following mutable properties that can be changed:
