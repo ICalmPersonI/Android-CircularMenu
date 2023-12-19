@@ -11,6 +11,25 @@ dependencies {
     implementation 'com.example:circular-menu:1.0.0'
 }
 ```
-## Quick Start
+Quick Start
+Example Usage
+To quickly get started with the Circular Menu library, you can initialize a basic circular menu with default settings. Below is a simple example of how you might do this:
+
+```kotlin
+Copy code
+// Initialize CircularMenu
+val circularMenu = CircularMenu(context)
+
+// Customize menu attributes (optional)
+// circularMenu.setCenterButtonIconId(R.drawable.icon)
+// circularMenu.setColors(intArrayOf(Color.RED, Color.BLUE, Color.GREEN))
+
+// Add CircularMenu to your layout
+yourLayout.addView(circularMenu)
+```
+This code initializes a basic CircularMenu instance and demonstrates how to customize its attributes. For further customization options, refer to the full documentation.
+
+Documentation
+For detailed information on constructors, functions, and attributes, refer to the [full documentation here](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/master/documentation). This documentation covers all available methods and customization options provided by the Circular Menu library.
 
 Feel free to explore and customize the Circular Menu library to suit your app's needs.
