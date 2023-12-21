@@ -82,5 +82,13 @@ You can specify any number of colors or none at all, but there are nuances:
 - If you don't specify any colors or pass an empty array, the default color will be set."
 - These rules apply to any method of creating a Circular Menu.
 
+Next, add a listener for the sectors.
+```kotlin
+setOnSectorClickListener { view, sectorIndex ->
+	Log.d(TAG, "Sector index: $sectorIndex")        
+}
+```
+For the central button, it's not mandatory to specify a listener; when clicked, the CircularMenu will be removed from the ViewGroup.
+
 
 A detailed description of features and other examples can be found in the [documentation](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/91be57587a37786473c7737b34bce741e83fd5c2/doc.md).
