@@ -1,35 +1,86 @@
-# Circular Menu Android Library
+# Circular Menu
 
-Circular Menu is an Android library that provides a customizable circular menu component for your Android app. It allows for easy integration of circular menus with various customization options.
+## Prerequisites
 
-## Installation
+Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
 
-To integrate Circular Menu into your Android project, add the following dependency in your `build.gradle` file:
+```gradle
+allprojects {
+	repositories {
+		...
+		maven { url "https://jitpack.io" }
+	}
+}
+```
+
+## Dependency
+
+Add this to your module's `build.gradle` file (make sure the version matches the JitPack badge above):
 
 ```gradle
 dependencies {
-    implementation 'com.example:circular-menu:1.0.0'
+	...
+	implementation 'com.github.GrenderG:Toasty:1.5.2'
 }
 ```
-Quick Start
-Example Usage
-To quickly get started with the Circular Menu library, you can initialize a basic circular menu with default settings. Below is a simple example of how you might do this:
 
-```kotlin
-Copy code
-// Initialize CircularMenu
-val circularMenu = CircularMenu(context)
+## Quick Start
 
-// Customize menu attributes (optional)
-// circularMenu.setCenterButtonIconId(R.drawable.icon)
-// circularMenu.setColors(intArrayOf(Color.RED, Color.BLUE, Color.GREEN))
-
-// Add CircularMenu to your layout
-yourLayout.addView(circularMenu)
+Add an array of icons and colors (optional) to ```res/values/arrays.xml```
+```xml
+<resources>
+    <array name="colors">
+        <item>@color/teal_200</item>
+        <item>@color/teal_700</item>
+        <item>@color/purple_200</item>
+        <item>@color/purple_500</item>
+        <item>@color/purple_700</item>
+    </array>
+    
+    <array name="icons">
+        <item>@drawable/circle_heat</item>
+        <item>@drawable/cloud_arrow_down</item>
+        <item>@drawable/cloud_bolt</item>
+        <item>@drawable/cloud_rainbow</item>
+        <item>@drawable/cloud_snow_alt</item>
+        <item>@drawable/cloud_up_arrow</item>
+        <item>@drawable/droplets</item>
+        <item>@drawable/hurricane_alt</item>
+    </array>
+</resources>
 ```
-This code initializes a basic CircularMenu instance and demonstrates how to customize its attributes. For further customization options, refer to the full documentation.
 
-Documentation
-For detailed information on constructors, functions, and attributes, refer to the [full documentation here](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/91be57587a37786473c7737b34bce741e83fd5c2/doc.md). This documentation covers all available methods and customization options provided by the Circular Menu library.
+Add to your layout xml-file:
+```xml
+<com.calmperson.lib.CircularMenu
+    android:id="@+id/circle_menu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    app:circleMenu_colors="@array/colors"
+    app:circleMenu_icons="@array/icons"/>
+```
 
-Feel free to explore and customize the Circular Menu library to suit your app's needs.
+Or use this constructor:
+```kotlin
+CircularMenu(context = this, icons = R.array.eight_sectors)
+```
+
+If you want to set icons and colors (optional) programmatically, you can use this constructor:
+```kotlin
+CircularMenu(
+    context = this,
+    icons = intArrayOf(R.drawable.circle_heat, R.drawable.cloud_bolt, R.drawable.cloud_up_arrow),
+    colors = intArrayOf(R.color.teal_200, R.color.teal_700, R.color.purple_500),         
+)
+```
+
+You can specify any number of colors or none at all, but there are nuances:
+
+- The color is taken from the color array using this formula: ```colorIndex = sectorIndex % size```
+- If you don't specify any colors or pass an empty array, the default color will be set."
+- These rules apply to any method of creating a Circular Menu.
+
+
+A detailed description of features and other examples can be found in the [documentation](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/91be57587a37786473c7737b34bce741e83fd5c2/doc.md).
