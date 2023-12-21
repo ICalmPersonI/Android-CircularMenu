@@ -1,52 +1,104 @@
-## Usage
-### Constructor  
-The Circular Menu constructor accepts various parameters to customize its appearance:
+## CircularMenu
 
-### Initializing and Animations
+### Methods
 
-- `startOpenAnimation()`: Initiates the opening animation.
-- `startCloseAnimation(removeViewAfterEnd: Boolean = false)`: Initiates the closing animation, removing the view from the parent layout upon animation completion if specified.
+#### `startOpenAnimation()`
+Initiates the opening animation and triggers the corresponding method in the `AnimationEventListener`.
 
-### Customization
+#### `startCloseAnimation(removeViewAfterEnd: Boolean = false)`
+Initiates the closing animation and, upon animation completion, optionally removes the view from the parent layout.
 
-- `setColors(colors: IntArray)`: Sets colors for sectors, retrieving values using a formula.
-- `setIcons(iconsIds: IntArray, useChangeSectorsAnimation: Boolean)`: Sets icons for sectors, with an option to trigger sector change animation.
-- `setCenterButtonIconId(@DrawableRes iconId: Int)`: Sets the icon for the central button.
-- `setCenterButtonColorById(@ColorRes colorId: Int)`: Sets the color for the central button using a color resource.
-- `setCenterButtonColor(color: Int)`: Sets the color for the central button using an integer value.
-- `setButtonSpacing(px: Float)`: Sets the distance between sectors in dp.
-- `setCenterButtonPadding(px: Float)`: Sets padding from the inner radius of the circle to the button in dp.
-- `setCenterButtonPressedColorById(@ColorRes colorId: Int)`: Sets the color of the central button when pressed, using a color resource.
-- `setCenterButtonPressedColor(color: Int)`: Sets the color of the central button when pressed using an integer value.
+#### `startPressSectorAnimation(sectorIndex: Int)`
+Initiates the press animation of a specific sector (`sectorIndex`) and triggers the corresponding method in the `AnimationEventListener`.
 
-### Event Handling
+#### `startReleaseSectorAnimation(sectorIndex: Int)`
+Initiates the release animation of a specific sector (`sectorIndex`) and triggers the corresponding method in the `AnimationEventListener`.
 
-- `setAnimationEventListener(listener: AnimationEventListener)`: Overrides the AnimationEventListener.
-- `setOnCenterButtonClickListener(listener: (CircularMenu) -> Unit)`: Overrides the onCenterButtonClickListener.
-- `setOnSectorClickListener(listener: (CircularMenu, sectorIndex: Int) -> Unit)`: Overrides the onSectorClickListener.
+#### `startPressCenterButtonAnimation()`
+Initiates the press animation of the central button and triggers the corresponding method in the `AnimationEventListener`.
 
-### Utility Functions
+#### `startReleaseCenterButtonAnimation()`
+Initiates the release animation of the central button and triggers the corresponding method in the `AnimationEventListener`.
 
-- `removeThisViewFromParent()`: Removes the CircularMenu from the parent layout.
-- `size(): Int`: Returns the number of sectors (buttons).
-- `clearAnimation()`: Clears all animations and interrupts the chain of sequential animations.
-- `setBackgroundColor(color: Int)`: Does nothing, purposefully overridden to disallow setting a background.
+#### `setColors(colors: IntArray)`
+Sets the colors of the sectors based on the provided array. If empty, it sets a default array with a single color.
 
+#### `setIcons(iconsIds: IntArray, useChangeSectorsAnimation: Boolean)`
+Sets new icons for the sectors, creating new instances of the sector. Supports setting from 2 to 10 sectors.
 
-### Sector Properties
-The Sector object has the following mutable properties that can be changed:
+#### `setCenterButtonIconId(@DrawableRes iconId: Int)`
+Sets the icon for the central button.
 
-```var icon: Int```: Icon resource for the sector.  
-```var defaultColor: Int```: Default color resource for the sector.  
-```var currentColor: Int```: Current color resource for the sector.  
-```var startCloseAnimationAfterClick```: Boolean: Boolean indicating if the close animation should start after a sector click.  
+#### `setCenterButtonColorById(@ColorRes colorId: Int)`
+Sets the color for the central button based on the provided color resource ID.
 
-### Attributes
-The library provides several XML attributes to customize the Circular Menu in your layout file:
+#### `setCenterButtonColor(color: Int)`
+Sets the color for the central button using an integer value representing the color.
 
-```circleMenu_icons``` (format: reference): Array of icons for the menu sectors.  
-```circleMenu_colors``` (format: reference): Array of colors for the menu sectors.  
-```circleMenu_centerButtonIcon``` (format: reference): Icon resource for the center button.  
-```circleMenu_centerButtonColor``` (format: reference): Color resource for the center button.  
-```circleMenu_buttonSpacing``` (format: dimension): Spacing between menu buttons.  
-```circleMenu_centerButtonPadding``` (format: dimension): Padding for the center button. 
+#### `setButtonSpacing(px: Float)`
+Sets the distance between sectors (buttons) in dp.
+
+#### `setCenterButtonPadding(px: Float)`
+Sets the padding from the inner radius of the circle to the button in dp.
+
+#### `setCenterButtonPressedColorById(@ColorRes colorId: Int)`
+Sets the color of the central button when pressed, based on the provided color resource ID.
+
+#### `setCenterButtonPressedColor(color: Int)`
+Sets the color of the central button when pressed using an integer value representing the color.
+
+#### `setAnimationEventListener(listener: AnimationEventListener)`
+Overrides the `AnimationEventListener`.
+
+#### `setOnCenterButtonClickListener(listener: (CircularMenu) -> Unit)`
+Overrides the `onCenterButtonClickListener`.
+
+#### `setOnSectorClickListener(listener: (CircularMenu, sectorIndex: Int) -> Unit)`
+Overrides the `onSectorClickListener`.
+
+#### `removeThisViewFromParent()`
+Removes the CircularMenu from the parent layout.
+
+#### `size(): Int`
+Returns the number of sectors (buttons).
+
+#### `getSectorIndex(x: Float, y: Float): Int?`
+Returns the sector index if the point (x, y) is within one of them, returns null otherwise.
+
+#### `isPointInCenterButton(x: Float, y: Float): Boolean`
+Returns a boolean indicating whether the point (x, y) is within the inner radius of the circular menu (center button).
+
+#### `clearAnimation()`
+Clears all animations, interrupting the chain of sequential animations and triggering the method `AnimationEventListener.animationOnCancel()`.
+
+#### `setBackgroundColor(color: Int)`
+Does nothing; overridden purposefully as setting a background should not be allowed.
+
+## AnimationProperties
+
+A data class representing properties for animating the circular menu.
+
+### Properties
+
+#### `animatedSectorIndex: Int`
+Index of the sector currently being animated.
+
+#### `outerRadiusOffset: Float`
+Offset of the outer radius of the menu for the sector currently being animated (`animatedSectorIndex`).
+
+#### `innerRadiusOffset: Float`
+Offset of the inner radius of the menu, referring to the radius of the central button.
+
+#### `angleOffset: Float`
+Offset in the angle of the menu radius for the sector currently being animated (`animatedSectorIndex`). The angle offset applies to both the starting and ending angles, creating a collapsing effect.
+
+#### `centerButtonRotation: Float`
+The rotation value of the circular menu around the x-axis.
+
+#### `singleSectorAnimation: Boolean`
+Flag indicating that it's not a cascade animation for all sectors, but only for a specific sector (`animatedSectorIndex`).
+
+### Methods
+
+#### `restoreDefaultState()`
+Resets property values to their default state.
