@@ -62,9 +62,9 @@ Add to your layout xml-file:
     app:circleMenu_icons="@array/icons"/>
 ```
 
-Or use this constructor:
+Or you can use one of the two constructors:
 ```kotlin
-CircularMenu(context = this, icons = R.array.eight_sectors)
+CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors)
 ```
 
 If you want to set icons and colors (optional) programmatically, you can use this constructor:
@@ -90,5 +90,8 @@ setOnSectorClickListener { view, sectorIndex ->
 ```
 For the central button, it's not mandatory to specify a listener; when clicked, the CircularMenu will be removed from the ViewGroup.
 
+## Animations
+Most animations are already implemented by default, except for the opening animation. If you need to disable the closing animation, you can simply redefine the central button press listener. Other animations are triggered only when you specify that you want to use them, based on logical flags in the functions where they are involved. If you want to use the opening animation, you'll need to define where and under what conditions to call it by yourself. All animations can be triggered independently, and there are corresponding [functions](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/master/doc.md#animations) for this purpose. Before starting any animation, if the previous one hasn't finished its task yet, it will be canceled.
 
+## Documentation
 A detailed description of features and other examples can be found in the [documentation](https://github.com/ICalmPersonI/AndroidCircularMenu/blob/91be57587a37786473c7737b34bce741e83fd5c2/doc.md).
