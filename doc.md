@@ -26,20 +26,23 @@ constructor(
 ```
 
 ## Animations
+All animations are triggered by their respective method in the ```AnimationEventListener``` based on their life cycle.
 
-- `startOpenAnimation()` Initiates the opening animation and triggers the corresponding method in the `AnimationEventListener`.
+- `startOpenAnimation()` Initiates the opening animation.
 
 - `startCloseAnimation(removeViewAfterEnd: Boolean = false)` Initiates the closing animation and, upon animation completion, optionally removes the view from the parent layout.
 
-- `startPressSectorAnimation(sectorIndex: Int)` Initiates the press animation of a specific sector (`sectorIndex`) and triggers the corresponding method in the `AnimationEventListener`.
+- `startPressSectorAnimation(sectorIndex: Int)` Initiates the press animation of a specific sector (`sectorIndex`).
 
-- `startReleaseSectorAnimation(sectorIndex: Int)` Initiates the release animation of a specific sector (`sectorIndex`) and triggers the corresponding method in the `AnimationEventListener`.
+- `startReleaseSectorAnimation(sectorIndex: Int)` Initiates the release animation of a specific sector (`sectorIndex`).
 
-- `startPressCenterButtonAnimation()` Initiates the press animation of the central button and triggers the corresponding method in the `AnimationEventListener`.
+- `startPressCenterButtonAnimation()` Initiates the press animation of the central button.
 
-- `startReleaseCenterButtonAnimation()` Initiates the release animation of the central button and triggers the corresponding method in the `AnimationEventListener`.
+- `startReleaseCenterButtonAnimation()` Initiates the release animation of the central button.
+  
+- `startChangeSectorsAnimation(doWhenSectorsCollapsed: () -> Unit)` Initiates the collapse animation of all sectors, after it ended initiates the expand animation of all sectors. Using it for changing icons and colors is not recommended; for this purpose, there are `setIcons` and `setColors` functions.
 
-- `clearAnimation()` Clears all animations, interrupting the chain of sequential animations and triggering the method `AnimationEventListener.on(animation_name)Cancel()`.
+- `clearAnimation()` Clears all animations, interrupting the chain of sequential animations and triggering the funtion `AnimationEventListener.on(animation_name)Cancel()`.
 
 #### AnimationProperties class
 
