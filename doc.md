@@ -38,8 +38,8 @@ constructor(
 - `startPressCenterButtonAnimation()` Initiates the press animation of the central button and triggers the corresponding method in the `AnimationEventListener`.
 
 - `startReleaseCenterButtonAnimation()` Initiates the release animation of the central button and triggers the corresponding method in the `AnimationEventListener`.
-- 
-- - `clearAnimation()` Clears all animations, interrupting the chain of sequential animations and triggering the method `AnimationEventListener.on(animation_name)Cancel()`.
+
+- `clearAnimation()` Clears all animations, interrupting the chain of sequential animations and triggering the method `AnimationEventListener.on(animation_name)Cancel()`.
 
 #### AnimationProperties class
 
@@ -80,11 +80,53 @@ A data class representing properties for animating the circular menu.
 
 - `setCenterButtonPressedColor(color: Int)` Sets the color of the central button when pressed using an integer value representing the color.
 
-- `setAnimationEventListener(listener: AnimationEventListener)` Overrides the `AnimationEventListener`.
+- `setOnSectorClickListener(listener: (CircularMenu, sectorIndex: Int) -> Unit)` Overrides the `onSectorClickListener`.
+```kotlin
+setOnSectorClickListener { view, sectorIndex ->
+        Log.d(TAG, "Sector index: $sectorIndex")
+}
+```
 
 - `setOnCenterButtonClickListener(listener: (CircularMenu) -> Unit)` Overrides the `onCenterButtonClickListener`.
+```kotlin
+setOnCenterButtonClickListener { view ->
+        Log.d(TAG, "Center button click.")
+}
+```
+  
+- `setAnimationEventListener(listener: AnimationEventListener)` Overrides the `AnimationEventListener`.
+```kotlin
+setAnimationEventListener(object : AnimationEventListener {
+            override fun onOpenMenuAnimationStart() {}
+            override fun onOpenMenuAnimationEnd() {}
+            override fun onOpenMenuAnimationCancel() {}
 
-- `setOnSectorClickListener(listener: (CircularMenu, sectorIndex: Int) -> Unit)` Overrides the `onSectorClickListener`.
+            override fun onCloseMenuAnimationStart() {}
+            override fun onCloseMenuAnimationEnd() {}
+            override fun onCloseMenuAnimationCancel() {}
+
+            override fun onChangeSectorsAnimationStart() {}
+            override fun onChangeSectorsAnimationEnd() {}
+            override fun onChangeSectorsAnimationCancel() {}
+
+            override fun onPressSectorAnimationStart() {}
+            override fun onPressSectorAnimationEnd() {}
+            override fun onPressSectorAnimationCancel() {}
+
+            override fun onReleaseSectorAnimationStart() {}
+            override fun onReleaseSectorAnimationEnd() {}
+            override fun onReleaseSectorAnimationCancel() {}
+
+            override fun onPressCenterButtonAnimationStart() {}
+            override fun onPressCenterButtonAnimationEnd() {}
+            override fun onPressCenterButtonAnimationCancel() {}
+
+            override fun onReleaseCenterButtonAnimationStart() {}
+            override fun onReleaseCenterButtonAnimationEnd() {}
+            override fun onReleaseCenterButtonAnimationCancel() {}
+        }
+    })
+```
 
 ## Other
  
