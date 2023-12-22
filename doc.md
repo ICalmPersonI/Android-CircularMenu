@@ -17,9 +17,9 @@ constructor(
         context: Context?,
         @ArrayRes iconsArrayId: Int,
         @DrawableRes centerButtonIconId: Int = Drawer.DEFAULT_CENTER_BUTTON_ICON_RES_ID,
-        @ArrayRes colorsArrayId: Int,
-        @ColorRes centerButtonColorId: Int,
-        @ColorRes centerButtonPressedColorId: Int,
+        @ArrayRes colorsArrayId: Int = R.array.colors,
+        @ColorRes centerButtonColorId: Int = R.color.color_default,
+        @ColorRes centerButtonPressedColorId: Int = R.color.pressed_color,
         buttonSpacingPx: Float = Drawer.DEFAULT_BUTTON_SPACING,
         centerButtonPaddingPx: Float = Drawer.DEFAULT_CENTER_BUTTON_PADDING
     )
