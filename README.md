@@ -29,28 +29,19 @@ dependencies {
 Add an array of icons and colors (optional) to ```res/values/arrays.xml```
 ```xml
 <resources>
+    <resources>
     <array name="colors">
-        <item>@color/teal_200</item>
-        <item>@color/teal_700</item>
-        <item>@color/purple_200</item>
-        <item>@color/purple_500</item>
-        <item>@color/purple_700</item>
+        <!-- Add your color items -->
     </array>
     
     <array name="icons">
-        <item>@drawable/circle_heat</item>
-        <item>@drawable/cloud_arrow_down</item>
-        <item>@drawable/cloud_bolt</item>
-        <item>@drawable/cloud_rainbow</item>
-        <item>@drawable/cloud_snow_alt</item>
-        <item>@drawable/cloud_up_arrow</item>
-        <item>@drawable/droplets</item>
-        <item>@drawable/hurricane_alt</item>
+        <!-- Add your icon items -->
     </array>
+</resources>
 </resources>
 ```
 
-Add to your layout xml-file:
+Include the following in your layout xml-file:
 ```xml
 <com.calmperson.lib.CircularMenu
     android:id="@+id/circle_menu"
@@ -62,12 +53,12 @@ Add to your layout xml-file:
     app:circleMenu_icons="@array/icons"/>
 ```
 
-Or you can use one of the two constructors:
+Alternatively, use one of the two constructors in Kotlin:
 ```kotlin
 CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors)
 ```
 
-If you want to set icons and colors (optional) programmatically, you can use this constructor:
+Or programmatically set icons and colors using::
 ```kotlin
 CircularMenu(
     context = this,
