@@ -24,6 +24,9 @@ dependencies {
 }
 ```
 
+## Demo
+[Demo](https://github.com/ICalmPersonI/AndroidCircularMenu/assets/87424785/9316b2b6-a84d-4b7e-bb7d-44adc3370e12)
+
 ## Quick Start
 
 Add an array of icons and colors (optional) to ```res/values/arrays.xml```
