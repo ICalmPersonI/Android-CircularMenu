@@ -83,6 +83,10 @@ A data class representing properties for animating the circular menu.
 
 - `setCenterButtonPressedColor(color: Int)` Sets the color of the central button when pressed using an integer value representing the color.
 
+- `setCenterButtonCurrentColorById(@ColorRes colorId: Int) ` Sets the current color of the central button when pressed, based on the provided color resource ID.
+
+- `setCenterButtonCurrentColor(color: Int)` Sets the current color of the central button when pressed using an integer value representing the color.
+
 - `setOnSectorClickListener(listener: (CircularMenu, sectorIndex: Int) -> Unit)` Overrides the `onSectorClickListener`.
 ```kotlin
 setOnSectorClickListener { view, sectorIndex ->
@@ -142,3 +146,5 @@ setAnimationEventListener(object : AnimationEventListener {
 - `isPointInCenterButton(x: Float, y: Float): Boolean` Returns a boolean indicating whether the point (x, y) is within the inner radius of the circular menu (center button).
 
 - `setBackgroundColor(color: Int)` Does nothing; overridden purposefully as setting a background should not be allowed.
+
+## Example 
