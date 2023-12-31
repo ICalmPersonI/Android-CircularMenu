@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/ICalmPersonI/AndroidCircularMenu.svg)](https://jitpack.io/#ICalmPersonI/AndroidCircularMenu)
+[![](https://jitpack.io/v/ICalmPersonI/Android-CircularMenu.svg)](https://jitpack.io/#ICalmPersonI/Android-CircularMenu)
 # Circular Menu
 
 ## Prerequisites
@@ -22,12 +22,13 @@ Add this to your module's `build.gradle` file (make sure the version matches the
 ```gradle
 dependencies {
 	...
-	implementation 'com.calmperson.lib.circularmenu:CircularMenu:0.0.9'
+	implementation 'com.calmperson.lib.circularmenu:CircularMenu:0.1.9'
 }
 ```
 
 ## Demo
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/87424785/293511227-2e29c1cd-4baa-4e6d-a979-5b88c21addc7.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20231231%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231231T144804Z&X-Amz-Expires=300&X-Amz-Signature=a017db590991e1cf6215a6a9fd86296172f6d64fc7fdc2f0d696e6aad5f16c14&X-Amz-SignedHeaders=host&actor_id=87424785&key_id=0&repo_id=732457308" alt="1" width="280" height="420">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/87424785/293511227-2e29c1cd-4baa-4e6d-a979-5b88c21addc7.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20231231%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231231T144804Z&X-Amz-Expires=300&X-Amz-Signature=a017db590991e1cf6215a6a9fd86296172f6d64fc7fdc2f0d696e6aad5f16c14&X-Amz-SignedHeaders=host&actor_id=87424785&key_id=0&repo_id=732457308" alt="1" width="280" height="450"><img src="https://github.com/ICalmPersonI/Android-CircularMenu/assets/87424785/47f87efa-1f00-4c9a-9b95-4921d05fc00f" alt="1" width="280" height="450">
+
 
 ## Quick Start
 
@@ -52,18 +53,13 @@ Include the following in your layout xml-file:
     android:id="@+id/circle_menu"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
     app:circleMenu_colors="@array/colors"
     app:circleMenu_icons="@array/icons"/>
 ```
 
 Alternatively, use one of the two constructors in Kotlin:
 ```kotlin
-CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors).apply {
-	isClickable = true
-	isFocusable = true
-}
+CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors)
 ```
 
 Or programmatically set icons and colors using::
@@ -72,10 +68,7 @@ CircularMenu(
     context = this,
     icons = intArrayOf(R.drawable.circle_heat, R.drawable.cloud_bolt, R.drawable.cloud_up_arrow),
     colors = intArrayOf(R.color.teal_200, R.color.teal_700, R.color.purple_500),         
-).apply {
-	isClickable = true
-	isFocusable = true
-}
+)
 ```
 
 You can specify any number of colors or none at all, but there are nuances:
