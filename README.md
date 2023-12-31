@@ -43,7 +43,6 @@ Add an array of icons and colors (optional) to ```res/values/arrays.xml```
         <!-- Add your icon items -->
     </array>
 </resources>
-</resources>
 ```
 
 Include the following in your layout xml-file:
