@@ -6,6 +6,8 @@ import android.view.MotionEvent
 import androidx.annotation.ArrayRes
 import com.calmperson.lib.CircularMenu
 
+
+//The example of a custom implementation (not all features are presented).
 class MyCircularMenu(
     context: Context,
     @ArrayRes iconsArrayId: Int

@@ -98,8 +98,6 @@ class MainActivity : AppCompatActivity() {
             context = this,
             icons = intArrayOf(R.drawable.cance_circle, R.drawable.cloud_rainbow, R.drawable.droplets),
         ).apply {
-            isClickable = true
-            isFocusable = true
             setPadding(10, 10, 10, 10)
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
@@ -113,8 +111,6 @@ class MainActivity : AppCompatActivity() {
             context = this,
             iconsArrayId = R.array.ten_sectors,
         ).apply {
-            isClickable = true
-            isFocusable = true
             setPadding(10, 10, 10, 10)
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
@@ -135,8 +131,6 @@ class MainActivity : AppCompatActivity() {
             buttonSpacingDp = 20f,
             centerButtonPaddingDp = 20f
         ).apply {
-            isClickable = true
-            isFocusable = true
             setPadding(10, 10, 10, 10)
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
@@ -157,8 +151,6 @@ class MainActivity : AppCompatActivity() {
             buttonSpacingDp = 10f,
             centerButtonPaddingDp = 10f
         ).apply {
-            isClickable = true
-            isFocusable = true
             setPadding(20, 20, 20, 20)
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)
@@ -174,8 +166,6 @@ class MainActivity : AppCompatActivity() {
             context = this,
             iconsArrayId = R.array.four_sectors
         ).apply {
-            isClickable = true
-            isFocusable = true
             setPadding(20, 20, 20, 20)
             layoutParams = GridLayout.LayoutParams().apply {
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f)

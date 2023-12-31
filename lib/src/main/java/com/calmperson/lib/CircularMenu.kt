@@ -131,6 +131,8 @@ open class CircularMenu : View {
 
     init {
         setLayerType(LAYER_TYPE_SOFTWARE, null)
+        isClickable = true
+        isFocusable = true
     }
 
     /**
