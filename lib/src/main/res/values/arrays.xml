@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="colors">
+        <item>@color/color_default</item>
+    </array>
+
+    <array name="icons">
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+    </array>
+    <array name="test_colors">
+        <item>@color/purple_200</item>
+        <item>@color/purple_500</item>
+        <item>@color/purple_700</item>
+    </array>
+    <array name="empty_icons"/>
+    <array name="empty_colors"/>
+    <array name="one_icon">
+        <item>@drawable/cloud_snow</item>
+    </array>
+    <array name="more_than_ten_icons">
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+        <item>@drawable/cancel</item>
+        <item>@drawable/cloud_snow</item>
+    </array>
+
+</resources>

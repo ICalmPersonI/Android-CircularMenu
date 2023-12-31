@@ -2,7 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="AnimationsTest">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.calmperson.lib'">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testPressSectorAnimation_startToEnd()">
+        <State />
+      </entry>
+      <entry key="testSetCenterButtonCurrentColor()">
         <State />
       </entry>
     </value>

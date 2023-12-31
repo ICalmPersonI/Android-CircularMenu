@@ -1,38 +1,53 @@
 package com.calmperson.lib
 
+import java.math.RoundingMode
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-internal class PointCalculator(private val drawer: Drawer) {
+internal class PointCalculator {
 
-    fun isPointInCenterButton(x: Float, y: Float): Boolean = with(drawer) {
-        val distance = sqrt((centerX - x).toDouble().pow(2) + (centerY - y).toDouble().pow(2))
-        return distance < innerRadius - centerButtonPadding - innerRadiusOffset
+    fun isPointInCenterButton(
+        x: Float,
+        y: Float,
+        centerX: Float,
+        centerY: Float,
+        innerRadius: Float,
+        centerButtonPadding: Float
+    ): Boolean {
+        val distance = sqrt(
+            (centerX - x).toDouble().pow(2) + (centerY - y).toDouble().pow(2)
+        ).toBigDecimal().setScale(4, RoundingMode.HALF_UP).toFloat()
+        return distance <= innerRadius - centerButtonPadding
     }
 
-    fun isPontInSector(x: Float, y: Float, startAngle: Int, endAngle: Int): Boolean {
-        with(drawer) {
-            val distance = sqrt((centerX - x).toDouble().pow(2) + (centerY - y).toDouble().pow(2))
+    fun isPontInSector(
+        x: Float,
+        y: Float,
+        startAngle: Int,
+        endAngle: Int,
+        centerX: Float,
+        centerY: Float,
+        outerRadius: Float,
+        innerRadius: Float,
+    ): Boolean {
+        val distance = sqrt(
+            (centerX - x).toDouble().pow(2) + (centerY - y).toDouble().pow(2)
+        ).toBigDecimal().setScale(4, RoundingMode.HALF_UP).toFloat()
 
-            if (distance > outerRadius - outerRadiusOffset ||
-                distance < innerRadius) {
-                return false
-            }
+        if (distance < innerRadius || distance > outerRadius) return false
 
-            val deltaX = x - centerX
-            val deltaY = centerY - y
+        val deltaX = x - centerX
+        val deltaY = centerY - y
 
-            val angleRadians = atan2(deltaY.toDouble(), deltaX.toDouble())
-            var angle = Math.toDegrees(angleRadians)
+        val angleRadians = atan2(deltaY.toDouble(), deltaX.toDouble())
+        var angle = Math.toDegrees(angleRadians)
 
-            if (angle > 0) {
-                angle -= 360.0
-            }
+        if (angle > 0) angle -= 360.0
 
-            return abs(angle).toInt() in startAngle..endAngle
-        }
+        return abs(angle).roundToInt() in startAngle..endAngle
     }
 
 }

@@ -5,8 +5,7 @@
         <attr name="circleMenu_colors" format="reference"/>
         <attr name="circleMenu_centerButtonIcon" format="reference"/>
         <attr name="circleMenu_centerButtonColor" format="reference"/>
-        <attr name="circleMenu_buttonSpacing" format="dimension"/>
+        <attr name="circleMenu_sectorSpacing" format="dimension"/>
         <attr name="circleMenu_centerButtonPadding" format="dimension"/>
-        <attr name="circleMenu_useStandardAnimation" format="boolean"/>
     </declare-styleable>
 </resources>

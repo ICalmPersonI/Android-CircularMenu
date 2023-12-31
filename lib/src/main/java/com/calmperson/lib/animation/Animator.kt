@@ -1,5 +1,6 @@
 package com.calmperson.lib.animation
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.view.animation.Interpolator
@@ -9,141 +10,456 @@ import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import com.calmperson.lib.CircularMenu
-import com.calmperson.lib.Drawer
+import com.calmperson.lib.model.AnimationProperties
+import com.calmperson.lib.model.GeometricProperties
 
-internal class Animator(private val circularMenu: CircularMenu, private val drawer: Drawer) {
+internal class Animator(
+    private val geometricProperties: GeometricProperties,
+    private val animationProperties: AnimationProperties,
+    private val setClickable: (Boolean) -> Unit,
+    private val invalidate: () -> Unit,
+    private val getNumberOfSectors: () -> Int,
+) {
 
-    companion object {
-        private const val COLLAPSE_SECTORS_DURATION = 100L
-        private const val COLLAPSE_CENTER_BUTTON_DURATION = 600L
-        private const val EXPAND_SECTORS_DURATION = 100L
-        private const val EXPAND_CENTER_BUTTON_DURATION = 600L
-        private const val START_CENTER_BUTTON_ROTATE_POSITION = 0f
-        private const val END_CENTER_BUTTON_ROTATE_POSITION = 180f
-    }
+    var animationEventListener: CircularMenu.AnimationEventListener = object : CircularMenu.AnimationEventListener { }
 
-    var animationEventListener = object : CircularMenu.AnimationEventListener {
-        override fun onOpenMenuAnimationStart() {}
-        override fun onOpenMenuAnimationEnd() {}
-        override fun onOpenMenuAnimationCancel() {}
-        override fun onCloseMenuAnimationStart() {}
-        override fun onCloseMenuAnimationEnd() {}
-        override fun onCloseMenuAnimationCancel() {}
-    }
-
-    private var currentAnimatorChain: AnimationChain? = null
+    private var currentAnimation: AnimationChain? = null
 
     fun startOpenAnimation() {
         cancelAnimations()
-        val animation = createCloseAnimation(
-            reverse = true,
+        animationProperties.cascadeAnimationMode = true
+        val animation = createOpenAnimation(
             onStart = {
-                animationEventListener.onCloseMenuAnimationStart()
-                drawer.animatedSectorIndex = circularMenu.numberOfSectors
-                circularMenu.isClickable = false
+                animationEventListener.onOpenMenuAnimationStart()
+                animationProperties.animatedSectorIndex = getNumberOfSectors()
+                setClickable(false)
+            },
+            onEnd = {
+                animationEventListener.onOpenMenuAnimationEnd()
+                setClickable(true)
+            },
+            onCancel = {
+                animationEventListener.onOpenMenuAnimationCancel()
+                setClickable(true)
             }
         )
-        currentAnimatorChain = animation
+        currentAnimation = animation
         animation.start()
     }
 
     fun startCloseAnimation() {
         cancelAnimations()
+        animationProperties.cascadeAnimationMode = true
         val animation = createCloseAnimation(
             onStart = {
                 animationEventListener.onCloseMenuAnimationStart()
-                drawer.animatedSectorIndex = 0
-                circularMenu.isClickable = false
+                animationProperties.animatedSectorIndex = 0
+                setClickable(false)
+            },
+            onEnd = {
+                animationEventListener.onCloseMenuAnimationEnd()
+                setClickable(true)
+            },
+            onCancel = {
+                animationEventListener.onCloseMenuAnimationCancel()
+                setClickable(true)
             }
         )
-        currentAnimatorChain = animation
+        currentAnimation = animation
         animation.start()
     }
 
-    private fun cancelAnimations() {
-        currentAnimatorChain?.cancel()
-        currentAnimatorChain = null
-    }
-
-    private fun createCloseAnimation(
-        reverse: Boolean = false,
-        onStart: () -> Unit = {},
-        onEnd: () -> Unit = {
-            if (reverse) animationEventListener.onOpenMenuAnimationEnd()
-            else animationEventListener.onCloseMenuAnimationEnd()
-            circularMenu.isClickable = true
-        },
-        onCancel: () -> Unit = {
-            if (reverse) animationEventListener.onOpenMenuAnimationCancel()
-            else animationEventListener.onCloseMenuAnimationCancel()
-            circularMenu.isClickable = true
-        },
-    ): AnimationChain = with(drawer) {
-        val centerOfAngle = (360 / circularMenu.numberOfSectors) / 2
-        val expandSectorsAnimationAngleOffset = createValueAnimator(
-            values = intArrayOf(0, centerOfAngle),
-            duration = if (reverse) EXPAND_SECTORS_DURATION else COLLAPSE_SECTORS_DURATION,
-            interpolator = if (reverse) ReverseInterpolator() else LinearInterpolator(),
-            updateListener = { value -> angleOffset = value },
-        )
-
-        val distanceBetweenRadii = (outerRadius - innerRadius).toInt()
-        val expandSectorsAnimationRadiusOffset = createValueAnimator(
-            values = intArrayOf(0, distanceBetweenRadii),
-            duration = if (reverse) EXPAND_SECTORS_DURATION else COLLAPSE_SECTORS_DURATION,
-            interpolator = if (reverse) ReverseInterpolator() else LinearInterpolator(),
-            updateListener = { value -> outerRadiusOffset = value; circularMenu.invalidate() },
-        )
-
-        val createSet = {
-            AnimatorSet().apply {
-                playTogether(
-                    expandSectorsAnimationAngleOffset,
-                    expandSectorsAnimationRadiusOffset
-                )
-                addListener(
-                    onEnd = {
-                        if (reverse) animatedSectorIndex--
-                        else animatedSectorIndex++
+    fun startChangeSectorsAnimation(onCollapseSectorsAnimationEnd: () -> Unit) {
+        cancelAnimations()
+        animationProperties.cascadeAnimationMode = true
+        val collapseSectorsAnimation = AnimationChain(
+            *createCollapseSectorsAnimation(),
+            onStart = {
+                animationEventListener.onChangeSectorsAnimationStart()
+                animationProperties.animatedSectorIndex = 0
+                setClickable(false)
+            },
+            onCancel = {
+                animationEventListener.onChangeSectorsAnimationCancel()
+                setClickable(true)
+            }
+        ).apply {
+            addOnEndListener {
+                onCollapseSectorsAnimationEnd.invoke()
+                val expandSectorsAnimation = AnimationChain(
+                    *createExpandSectorsAnimation(),
+                    onStart = {
+                        animationProperties.animatedSectorIndex = getNumberOfSectors()
+                    },
+                    onCancel = {
+                        animationEventListener.onChangeSectorsAnimationCancel()
+                        setClickable(true)
+                    },
+                ).apply {
+                    addOnEndListener {
+                        animationEventListener.onChangeSectorsAnimationEnd()
+                        setClickable(true)
                     }
-                )
+                }
+                currentAnimation = expandSectorsAnimation
+                expandSectorsAnimation.start()
             }
         }
 
-        val collapseCenterButtonAnimation = createValueAnimator(
-            values = intArrayOf(0, innerRadius.toInt()),
-            duration = if (reverse) EXPAND_CENTER_BUTTON_DURATION else COLLAPSE_CENTER_BUTTON_DURATION,
-            interpolator = if (reverse) ReverseInterpolator() else LinearInterpolator(),
-            updateListener = { value -> innerRadiusOffset = value; circularMenu.invalidate() },
-        )
+        currentAnimation = collapseSectorsAnimation
+        collapseSectorsAnimation.start()
+    }
 
-        val rotateCenterButtonAnimation = createSpringAnimation(
-            startPosition = if (reverse) END_CENTER_BUTTON_ROTATE_POSITION else START_CENTER_BUTTON_ROTATE_POSITION,
-            finalPosition = if (reverse) START_CENTER_BUTTON_ROTATE_POSITION else END_CENTER_BUTTON_ROTATE_POSITION,
-            updateListener = { value -> circularMenu.rotation = value; circularMenu.invalidate() },
+    fun startPressSectorAnimation(sectorIndex: Int) {
+        cancelAnimations()
+        animationProperties.cascadeAnimationMode = false
+        val animation = createPressSectorAnimation(
+            onStart = {
+                animationProperties.animatedSectorIndex = sectorIndex
+                animationEventListener.onPressSectorAnimationStart()
+            },
+            onEnd = {
+                animationEventListener.onPressSectorAnimationEnd()
+            },
+            onCancel = {
+                animationEventListener.onPressSectorAnimationCancel()
+            }
         )
+        currentAnimation = animation
+        animation.start()
+    }
 
-        return if (reverse) {
-            AnimationChain(
-                collapseCenterButtonAnimation,
-                rotateCenterButtonAnimation,
-                *Array(circularMenu.numberOfSectors) { createSet.invoke() },
-                onStart = onStart,
-                onEnd = onEnd,
-                onCancel = onCancel,
-            )
-        } else {
-            AnimationChain(
-                *Array(circularMenu.numberOfSectors) { createSet.invoke() },
-                rotateCenterButtonAnimation,
-                collapseCenterButtonAnimation,
-                onStart = onStart,
-                onEnd = onEnd,
-                onCancel = onCancel,
+    fun startReleaseSectorAnimation(sectorIndex: Int) {
+        cancelAnimations()
+        animationProperties.cascadeAnimationMode = false
+        val animation = createReleaseSectorAnimation(
+            onStart = {
+                animationProperties.animatedSectorIndex = sectorIndex
+                animationEventListener.onReleaseSectorAnimationStart()
+            },
+            onEnd = {
+                animationEventListener.onReleaseSectorAnimationEnd()
+            },
+            onCancel = {
+                animationEventListener.onReleaseSectorAnimationCancel()
+            }
+        )
+        currentAnimation = animation
+        animation.start()
+    }
+
+    fun startPressCenterButtonAnimation() {
+        animationProperties.cascadeAnimationMode = false
+        val animation = createPressCenterButtonAnimation(
+            onStart = { animationEventListener.onPressCenterButtonAnimationStart() },
+            onEnd = {
+                animationEventListener.onPressCenterButtonAnimationEnd()
+            },
+            onCancel = {
+                animationEventListener.onPressCenterButtonAnimationCancel()
+            }
+        )
+        currentAnimation = animation
+        animation.start()
+    }
+
+    fun startReleaseCenterButtonAnimation() {
+        val animation = createReleaseCenterButtonAnimation(
+            onStart = { animationEventListener.onReleaseCenterButtonAnimationStart() },
+            onEnd = {
+                animationEventListener.onReleaseCenterButtonAnimationEnd()
+            },
+            onCancel = {
+                animationEventListener.onReleaseCenterButtonAnimationCancel()
+            }
+        )
+        currentAnimation = animation
+        animation.start()
+    }
+
+    fun cancelAnimations() {
+        currentAnimation?.cancel {
+            currentAnimation = null
+            animationProperties.restoreDefaultState()
+            invalidate()
+        }
+    }
+
+    private fun createPressCenterButtonAnimation(
+        onStart: () -> Unit = { },
+        onEnd: () -> Unit = { },
+        onCancel: () -> Unit = { }
+    ): AnimationChain = with(geometricProperties) {
+        val animation = createValueAnimator(
+            values = intArrayOf(0, innerRadius.toInt() / 5),
+            duration = animationProperties.pressCenterButtonAnimationDuration,
+            interpolator = LinearInterpolator(),
+            updateListener = { value ->
+                animationProperties.innerRadiusOffset = value
+                invalidate()
+            },
+        )
+        return AnimationChain(
+            animation,
+            onStart = onStart,
+            onCancel = onCancel
+        ).apply { addOnEndListener(onEnd) }
+    }
+
+    private fun createReleaseCenterButtonAnimation(
+        onStart: () -> Unit = { },
+        onEnd: () -> Unit = { },
+        onCancel: () -> Unit = { }
+    ): AnimationChain = with(geometricProperties) {
+        val animation = createValueAnimator(
+            values = intArrayOf(0, innerRadius.toInt() / 5),
+            duration = animationProperties.releaseCenterButtonAnimationDuration,
+            interpolator = ReverseInterpolator(),
+            updateListener = { value ->
+                animationProperties.innerRadiusOffset = value
+                invalidate()
+            },
+        )
+        return AnimationChain(
+            animation,
+            onStart = onStart,
+            onCancel = onCancel
+        ).apply { addOnEndListener(onEnd) }
+    }
+
+    private fun createPressSectorAnimation(
+        onStart: () -> Unit = { },
+        onEnd: () -> Unit = { },
+        onCancel: () -> Unit = { }
+    ): AnimationChain = with(geometricProperties) {
+        val endAngleOffset = (360 / getNumberOfSectors()) / 15
+        val endOuterRadiusOffset = (outerRadius - innerRadius).toInt() / 15
+        return AnimationChain(
+            createCollapseSectorAnimation(
+                duration = animationProperties.pressSectorAnimationDuration,
+                startAngleOffset = 0,
+                endAngleOffset = endAngleOffset,
+                startOuterRadiusOffset = 0,
+                endOuterRadiusOffset = endOuterRadiusOffset
+            ),
+            onStart = onStart,
+            onCancel = onCancel,
+        ).apply { addOnEndListener { onEnd() } }
+    }
+
+    private fun createReleaseSectorAnimation(
+        onStart: () -> Unit = { },
+        onEnd: () -> Unit = { },
+        onCancel: () -> Unit = { }
+    ): AnimationChain = with(geometricProperties) {
+        val endAngleOffset = (360 / getNumberOfSectors()) / 15
+        val endOuterRadiusOffset = (outerRadius - innerRadius).toInt() / 15
+        return AnimationChain(
+            createExpandSectorAnimation(
+                duration = animationProperties.releaseSectorAnimationDuration,
+                startAngleOffset = 0,
+                endAngleOffset = endAngleOffset,
+                startOuterRadiusOffset = 0,
+                endOuterRadiusOffset = endOuterRadiusOffset
+            ),
+            onStart = onStart,
+            onCancel = onCancel,
+        ).apply { addOnEndListener { onEnd() } }
+    }
+
+    private fun createOpenAnimation(
+        onStart: () -> Unit = { },
+        onEnd: () -> Unit = { },
+        onCancel: () -> Unit = { }
+    ): AnimationChain = AnimationChain(
+        createExpandCenterButtonAnimation(),
+        *createExpandSectorsAnimation(),
+        onStart = onStart,
+        onCancel = onCancel,
+    ).apply { addOnEndListener(onEnd) }
+
+
+    private fun createCloseAnimation(
+        onStart: () -> Unit = { },
+        onEnd: () -> Unit = { },
+        onCancel: () -> Unit = { },
+    ): AnimationChain = AnimationChain(
+        *createCollapseSectorsAnimation(),
+        createCollapseCenterButtonAnimation(),
+        onStart = onStart,
+        onCancel = onCancel,
+    ).apply { addOnEndListener(onEnd) }
+
+    private fun createCollapseSectorsAnimation(): Array<AnimatorSet> = with(geometricProperties) {
+        val numberOfSectors = getNumberOfSectors()
+        val duration = animationProperties.collapseSectorAnimationDuration / numberOfSectors
+        val centerOfAngle = (360 / numberOfSectors) / 2
+        val distanceBetweenRadii = (outerRadius - innerRadius).toInt()
+        return Array(numberOfSectors) {
+            createCollapseSectorAnimation(
+                onEnd = { animationProperties.animatedSectorIndex++ },
+                duration = duration,
+                startAngleOffset = 0,
+                endAngleOffset = centerOfAngle,
+                startOuterRadiusOffset = 0,
+                endOuterRadiusOffset = distanceBetweenRadii
             )
         }
     }
 
+
+    private fun createExpandSectorsAnimation(): Array<AnimatorSet> = with(geometricProperties) {
+        val numberOfSectors = getNumberOfSectors()
+        val duration = animationProperties.expandSectorAnimationDuration / numberOfSectors
+        val centerOfAngle = (360 / numberOfSectors) / 2
+        val distanceBetweenRadii = (outerRadius - innerRadius).toInt()
+        return Array(numberOfSectors) {
+            createExpandSectorAnimation(
+                onStart = { animationProperties.animatedSectorIndex-- },
+                duration = duration,
+                startAngleOffset = 0,
+                endAngleOffset = centerOfAngle,
+                startOuterRadiusOffset = 0,
+                endOuterRadiusOffset = distanceBetweenRadii
+            )
+        }
+    }
+
+
+    private fun createCollapseSectorAnimation(
+        onStart: (Animator) -> Unit = { },
+        onEnd: (Animator) -> Unit = { },
+        onCancel: (Animator) -> Unit = { },
+        duration: Long,
+        startAngleOffset: Int,
+        endAngleOffset: Int,
+        startOuterRadiusOffset: Int,
+        endOuterRadiusOffset: Int,
+    ): AnimatorSet = with(animationProperties) {
+        val collapseSectorAnimationAngleOffset = createValueAnimator(
+            values = intArrayOf(startAngleOffset, endAngleOffset),
+            duration = duration,
+            interpolator = LinearInterpolator(),
+            updateListener = { value -> angleOffset = value },
+        )
+
+        val collapseSectorAnimationRadiusOffset = createValueAnimator(
+            values = intArrayOf(startOuterRadiusOffset, endOuterRadiusOffset),
+            duration = duration,
+            interpolator = LinearInterpolator(),
+            updateListener = { value ->
+                outerRadiusOffset = value
+                invalidate()
+            },
+        )
+
+        return AnimatorSet().apply {
+            playTogether(
+                collapseSectorAnimationAngleOffset,
+                collapseSectorAnimationRadiusOffset
+            )
+            addListener(onStart = onStart, onEnd = onEnd, onCancel = onCancel)
+        }
+    }
+
+    private fun createExpandSectorAnimation(
+        onStart: (Animator) -> Unit = { },
+        onEnd: (Animator) -> Unit = { },
+        onCancel: (Animator) -> Unit = { },
+        duration: Long,
+        startAngleOffset: Int,
+        endAngleOffset: Int,
+        startOuterRadiusOffset: Int,
+        endOuterRadiusOffset: Int,
+    ): AnimatorSet = with(animationProperties) {
+        val expandSectorAnimationAngleOffset = createValueAnimator(
+            values = intArrayOf(startAngleOffset, endAngleOffset),
+            duration = duration,
+            interpolator = ReverseInterpolator(),
+            updateListener = { value -> angleOffset = value },
+        )
+
+        val expandSectorAnimationRadiusOffset = createValueAnimator(
+            values = intArrayOf(startOuterRadiusOffset, endOuterRadiusOffset),
+            duration = duration,
+            interpolator = ReverseInterpolator(),
+            updateListener = { value ->
+                outerRadiusOffset = value
+                invalidate()
+            },
+        )
+        return AnimatorSet().apply {
+            playTogether(
+                expandSectorAnimationAngleOffset,
+                expandSectorAnimationRadiusOffset
+            )
+            addListener(onStart = onStart, onEnd = onEnd, onCancel = onCancel)
+        }
+    }
+
+    private fun createCollapseCenterButtonAnimation(
+        onStart: () -> Unit = { },
+        onCancel: () -> Unit = { },
+        onEnd: () -> Unit = { }
+    ): AnimationChain = with(animationProperties) {
+        val collapseCenterButtonAnimation = createValueAnimator(
+            values = intArrayOf(0, geometricProperties.innerRadius.toInt()),
+            duration = collapseCenterButtonDuration,
+            interpolator = LinearInterpolator(),
+            updateListener = { value ->
+                innerRadiusOffset = value
+                invalidate()
+            },
+        )
+
+        val rotateCenterButtonAnimation = createSpringAnimation(
+            startPosition = startCenterButtonRotatePosition,
+            finalPosition = endCenterButtonRotatePosition,
+            updateListener = { value ->
+                centerButtonRotation = value
+                invalidate()
+            },
+        )
+
+        return AnimationChain(
+            rotateCenterButtonAnimation,
+            collapseCenterButtonAnimation,
+            onStart = onStart,
+            onCancel = onCancel,
+        ).apply { addOnEndListener(onEnd) }
+    }
+
+    private fun createExpandCenterButtonAnimation(
+        onStart: () -> Unit = { },
+        onCancel: () -> Unit = { },
+        onEnd: () -> Unit = { }
+    ): AnimationChain = with(animationProperties) {
+        val expandCenterButtonAnimation = createValueAnimator(
+            values = intArrayOf(0, geometricProperties.innerRadius.toInt()),
+            duration = expandCenterButtonDuration,
+            interpolator = ReverseInterpolator(),
+            updateListener = { value ->
+                innerRadiusOffset = value
+                invalidate()
+            },
+        )
+
+        val rotateCenterButtonAnimation = createSpringAnimation(
+            startPosition = endCenterButtonRotatePosition,
+            finalPosition = startCenterButtonRotatePosition,
+            updateListener = { value ->
+                centerButtonRotation = value
+                invalidate()
+            },
+        )
+
+        return AnimationChain(
+            expandCenterButtonAnimation,
+            rotateCenterButtonAnimation,
+            onStart = onStart,
+            onCancel = onCancel,
+        ).apply { addOnEndListener(onEnd) }
+    }
 
     private fun createValueAnimator(
         vararg values: Int,
