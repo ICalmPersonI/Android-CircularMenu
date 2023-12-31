@@ -60,7 +60,10 @@ Include the following in your layout xml-file:
 
 Alternatively, use one of the two constructors in Kotlin:
 ```kotlin
-CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors)
+CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors).apply {
+	isClickable = true
+	isFocusable = true
+}
 ```
 
 Or programmatically set icons and colors using::
@@ -69,7 +72,10 @@ CircularMenu(
     context = this,
     icons = intArrayOf(R.drawable.circle_heat, R.drawable.cloud_bolt, R.drawable.cloud_up_arrow),
     colors = intArrayOf(R.color.teal_200, R.color.teal_700, R.color.purple_500),         
-)
+).apply {
+	isClickable = true
+	isFocusable = true
+}
 ```
 
 You can specify any number of colors or none at all, but there are nuances:
