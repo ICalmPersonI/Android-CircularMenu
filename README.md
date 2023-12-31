@@ -1,3 +1,4 @@
+[![](https://jitpack.io/v/ICalmPersonI/AndroidCircularMenu.svg)](https://jitpack.io/#ICalmPersonI/AndroidCircularMenu)
 # Circular Menu
 
 ## Prerequisites
