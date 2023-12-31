@@ -27,7 +27,7 @@ dependencies {
 ```
 
 ## Demo
-<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/87424785/293511227-2e29c1cd-4baa-4e6d-a979-5b88c21addc7.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20231231%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231231T144804Z&X-Amz-Expires=300&X-Amz-Signature=a017db590991e1cf6215a6a9fd86296172f6d64fc7fdc2f0d696e6aad5f16c14&X-Amz-SignedHeaders=host&actor_id=87424785&key_id=0&repo_id=732457308" alt="1" width="280" height="400">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/87424785/293511227-2e29c1cd-4baa-4e6d-a979-5b88c21addc7.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20231231%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231231T144804Z&X-Amz-Expires=300&X-Amz-Signature=a017db590991e1cf6215a6a9fd86296172f6d64fc7fdc2f0d696e6aad5f16c14&X-Amz-SignedHeaders=host&actor_id=87424785&key_id=0&repo_id=732457308" alt="1" width="280" height="420">
 
 ## Quick Start
 
