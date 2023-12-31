@@ -22,7 +22,7 @@ Add this to your module's `build.gradle` file (make sure the version matches the
 ```gradle
 dependencies {
 	...
-	implementation 'com.calmperson.lib.circularmenu:CircularMenu:0.1.9'
+	implementation 'com.calmperson.lib.circularmenu:CircularMenu:1.0.0'
 }
 ```
 
