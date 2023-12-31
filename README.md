@@ -22,7 +22,7 @@ Add this to your module's `build.gradle` file (make sure the version matches the
 ```gradle
 dependencies {
 	...
-	implementation 'com.calmperson.lib.circularmenu:CircularMenu:0.0.9'
+	implementation 'com.calmperson.lib.circularmenu:CircularMenu:0.1.9'
 }
 ```
 
@@ -52,18 +52,13 @@ Include the following in your layout xml-file:
     android:id="@+id/circle_menu"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
     app:circleMenu_colors="@array/colors"
     app:circleMenu_icons="@array/icons"/>
 ```
 
 Alternatively, use one of the two constructors in Kotlin:
 ```kotlin
-CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors).apply {
-	isClickable = true
-	isFocusable = true
-}
+CircularMenu(context = this, icons = R.array.icons, colors = R.array.colors)
 ```
 
 Or programmatically set icons and colors using::
@@ -72,10 +67,7 @@ CircularMenu(
     context = this,
     icons = intArrayOf(R.drawable.circle_heat, R.drawable.cloud_bolt, R.drawable.cloud_up_arrow),
     colors = intArrayOf(R.color.teal_200, R.color.teal_700, R.color.purple_500),         
-).apply {
-	isClickable = true
-	isFocusable = true
-}
+)
 ```
 
 You can specify any number of colors or none at all, but there are nuances:
