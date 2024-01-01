@@ -1,6 +1,6 @@
 # This is not the final version.
 
-## Attributes
+## XML Attributes
 
 - ```app:circleMenu_icons``` - array of icon ids
 - ```app:circleMenu_colors``` - array of colors
