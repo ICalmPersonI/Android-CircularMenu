@@ -1,28 +1,40 @@
 # This is not the final version.
+
+## Attributes
+
+- ```app:circleMenu_icons``` - array of icon ids
+- ```app:circleMenu_colors``` - array of colors
+- ```app:circleMenu_centerButtonIcon``` - center button icon resources id
+- ```app:circleMenu_centerButtonColor``` - center button color
+- ```app:circleMenu_sectorSpacing``` - space between sectors 
+- ```app:circleMenu_centerButtonPadding``` - space between center button and inner radius circler
+
 ## Constructors
 ```kotlin
-constructor(
+ constructor(
         context: Context?,
         @DrawableRes icons: IntArray,
         @DrawableRes centerButtonIconId: Int = Drawer.DEFAULT_CENTER_BUTTON_ICON_RES_ID,
         colors: IntArray = intArrayOf(Drawer.DEFAULT_COLOR),
+        sectorsPressedColor: Int = Drawer.DEFAULT_PRESSED_BUTTON_COLOR,
         centerButtonColor: Int = Drawer.DEFAULT_COLOR,
-        centerButtonPressedColor: Int = Drawer.PRESSED_BUTTON_COLOR,
-        buttonSpacingPx: Float = Drawer.DEFAULT_BUTTON_SPACING,
-        centerButtonPaddingPx: Float = Drawer.DEFAULT_CENTER_BUTTON_PADDING
-    )
+        centerButtonPressedColor: Int = Drawer.DEFAULT_PRESSED_BUTTON_COLOR,
+        buttonSpacingDp: Float = Drawer.DEFAULT_BUTTON_SPACING,
+        centerButtonPaddingDp: Float = Drawer.DEFAULT_CENTER_BUTTON_PADDING
+    ) 
 ```
 
 ```kotlin
 constructor(
         context: Context?,
         @ArrayRes iconsArrayId: Int,
-        @DrawableRes centerButtonIconId: Int = Drawer.DEFAULT_CENTER_BUTTON_ICON_RES_ID,
         @ArrayRes colorsArrayId: Int = Drawer.DEFAULT_COLORS_RES,
+        @ColorRes sectorsPressedColorId: Int = Drawer.DEFAULT_PRESSED_BUTTON_COLOR_RES,
+        @DrawableRes centerButtonIconId: Int = Drawer.DEFAULT_CENTER_BUTTON_ICON_RES_ID,
         @ColorRes centerButtonColorId: Int = Drawer.DEFAULT_COLOR_RES,
-        @ColorRes centerButtonPressedColorId: Int = Drawer.PRESSED_BUTTON_COLOR_RES,
-        buttonSpacingPx: Float = Drawer.DEFAULT_BUTTON_SPACING,
-        centerButtonPaddingPx: Float = Drawer.DEFAULT_CENTER_BUTTON_PADDING
+        @ColorRes centerButtonPressedColorId: Int = Drawer.DEFAULT_PRESSED_BUTTON_COLOR_RES,
+        buttonSpacingDp: Float = Drawer.DEFAULT_BUTTON_SPACING,
+        centerButtonPaddingDp: Float = Drawer.DEFAULT_CENTER_BUTTON_PADDING
     )
 ```
 
@@ -31,7 +43,7 @@ All animations are triggered by their respective method in the ```AnimationEvent
 
 - `startOpenAnimation()` Initiates the opening animation.
 
-- `startCloseAnimation(removeViewAfterEnd: Boolean = false)` Initiates the closing animation and, upon animation completion, optionally removes the view from the parent layout.
+- `startCloseAnimation()` Initiates the closing animation.
 
 - `startPressSectorAnimation(sectorIndex: Int)` Initiates the press animation of a specific sector (`sectorIndex`).
 
